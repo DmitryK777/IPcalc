@@ -1,5 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include<CommCtrl.h>
+#include<cstdio>
 #include"resource.h"
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lparam);
@@ -41,6 +43,19 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lparam)
 					if (FIRST_IPADDRESS(dwIPaddress) < 224) SendMessage(hIPmask, IPM_SETADDRESS, 0, 0xFFFFFF00);
 				}
 					break;
+
+
+				case IDC_IPMASK:
+				{
+					SendMessage(hIPmask, IPM_GETADDRESS, 0, (LPARAM)&dwIPmask);
+					DWORD dwIPprefix = 0;
+					for (DWORD iMask = dwIPmask; iMask & 0x80000000; dwIPprefix++) iMask <<= 1;
+					CHAR sz_prefix[3];
+					sprintf(sz_prefix, "%i", dwIPprefix);
+					SendMessage(hEditPrefix, WM_SETTEXT, 0, (LPARAM)sz_prefix);
+				}
+					break;
+
 
 				case IDOK:
 					break;
