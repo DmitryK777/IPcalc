@@ -1,0 +1,30 @@
+﻿<Window x:Class="IPCalculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="IP-Калькулятор" Height="450" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Margin="10">
+            <TextBlock Text="IP-адрес:"/>
+            <TextBox Name="IpAddressTextBox" Width="200"/>
+
+            <TextBlock Text="Маска подсети (в формате /24 или 255.255.255.0):"/>
+            <TextBox Name="SubnetMaskTextBox" Width="200"/>
+
+            <Button Content="Рассчитать" Click="Calculate_Click" Width="100" Margin="0,10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="10">
+            <TextBlock Text="Результаты:" FontWeight="Bold" Margin="0,10"/>
+            <TextBlock Name="NetworkAddressText"/>
+            <TextBlock Name="BroadcastAddressText"/>
+            <TextBlock Name="HostRangeText"/>
+            <TextBlock Name="HostCountText"/>
+            <TextBlock Name="IpClassText"/>
+        </StackPanel>
+    </Grid>
+</Window>
