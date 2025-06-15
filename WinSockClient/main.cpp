@@ -8,10 +8,13 @@
 #include<iphlpapi.h>
 #include<stdio.h>
 #include<iostream>
+#include<FormatLastError.h>
 
 using namespace std;
 
 #pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "FormatLastError.lib")
+
 
 #define DEFAULT_PORT "27015"
 
