@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PrintLastError.cpp">
+    <ClCompile Include="FormatLastError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

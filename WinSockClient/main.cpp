@@ -16,10 +16,9 @@ using namespace std;
 #pragma comment(lib, "FormatLastError.lib")
 
 
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT			"27015"
+#define DEFAULT_BUFFER_LENGTH	1500
 
-LPSTR FormatLastError(DWORD dwMessageID);
-VOID PrintLastError(DWORD dwMessageID);
 
 void main()
 {
@@ -72,13 +71,41 @@ void main()
 		closesocket(connect_socket);
 		freeaddrinfo(result);
 		WSACleanup();
+		return;
 	}
 
+	// 5) Отправка и получение данных с сервера
+	CONST CHAR sendbuffer[] = "Hello Server, I am client";
+	CHAR recvbuffer[DEFAULT_BUFFER_LENGTH] = {};
+	iResult = send(connect_socket, sendbuffer, sizeof(sendbuffer), 0);
+	if (iResult == SOCKET_ERROR)
+	{
+		PrintLastError(WSAGetLastError());
+		closesocket(connect_socket);
+		freeaddrinfo(result);
+		WSACleanup();
+		return;
+	}
 
-	// ?) Освобождаем ресурсы WinSock
+	do
+	{
+		iResult = recv(connect_socket, recvbuffer, DEFAULT_BUFFER_LENGTH, 0);
+		if (iResult > 0) cout << "Received bytes: " << iResult << ", Message " << recvbuffer << endl;
+		else if (iResult == 0) cout << "Connection closing" << endl;
+		else PrintLastError(WSAGetLastError());
+	} while (iResult > 0);
+
+	// 6) Закрываем соединение
+	iResult = shutdown(connect_socket, SD_SEND);
+	if (iResult == SOCKET_ERROR) PrintLastError(WSAGetLastError());
+
+	// 7) Освобождаем ресурсы WinSock
+	closesocket(connect_socket);
+	freeaddrinfo(result);
 	WSACleanup();
 }
 
+/*
 LPSTR FormatLastError(DWORD dwMessageID)
 {
 	LPSTR szBuffer = NULL;
@@ -102,3 +129,4 @@ VOID PrintLastError(DWORD dwMessageID)
 	printf("Error %i : %s", dwMessageID, szMessage);
 	LocalFree(szMessage);
 }
+*/
