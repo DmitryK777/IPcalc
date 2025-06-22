@@ -19,6 +19,7 @@ using namespace std;
 #define DEFAULT_PORT			"27015"
 #define DEFAULT_BUFFER_LENGTH	1500
 
+CONST CHAR g_OVERFLOW[DEFAULT_BUFFER_LENGTH] = "Sorry, too many connections, try again later.";
 
 void main()
 {
@@ -80,7 +81,7 @@ void main()
 
 	do
 	{
-		iResult = send(connect_socket, sendbuffer, sizeof(sendbuffer), 0);
+		iResult = send(connect_socket, sendbuffer, strlen(sendbuffer), 0);
 		if (iResult == SOCKET_ERROR)
 		{
 			PrintLastError(WSAGetLastError());
@@ -102,7 +103,14 @@ void main()
 		else if (iResult == 0) cout << "Connection closing" << endl;
 		else PrintLastError(WSAGetLastError());
 
+		if (strcmp(recvbuffer, g_OVERFLOW) == 0)
+		{
+			system("PAUSE");
+			break;
+		}
+
 		cout << "Введите сообщение: "; 
+		ZeroMemory(sendbuffer, DEFAULT_BUFFER_LENGTH);
 		SetConsoleCP(1251);
 		cin.getline(sendbuffer, DEFAULT_BUFFER_LENGTH);
 		SetConsoleCP(866);
@@ -125,6 +133,11 @@ void main()
 	closesocket(connect_socket);
 	freeaddrinfo(result);
 	WSACleanup();
+}
+
+VOID Receive(SOCKET connect_socket)
+{
+
 }
 
 /*
